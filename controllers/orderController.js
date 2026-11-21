@@ -109,4 +109,40 @@ const updateOrderStatus = async (req, res) => {
     }
 }
 
-module.exports = { placeOrder, getAllOrders, getOrderById, getCustomerWithOrders, updateOrderStatus }
+exports.deleteOrder = async (req, res) => {
+    try {
+        const data = req.params.id;
+
+        if (!data) {
+            return res.status(400).json({
+                message: "Order ID is required"
+            });
+        }
+
+        const order = await Order.findByIdAndDelete(data);
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Order deleted successfully",
+            order
+        });
+
+    } catch (err) {
+        if (err.name === "CastError") {
+            return res.status(400).json({
+                message: "Invalid Order ID"
+            });
+        }
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
+
+module.exports = { placeOrder, getAllOrders, getOrderById, getCustomerWithOrders, updateOrderStatus, deleteOrder }
