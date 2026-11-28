@@ -32,7 +32,7 @@ exports.getAllOrders = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate("customer", "firstName lastName email")
             .populate("products.product", "productName price category")
-        res.json({ message: "All orders fetched successfully", data: orders })
+        res.json({ message: "All orders retrieved successfully", data: orders })
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
